@@ -1,4 +1,42 @@
 import customtkinter as ctk
+import time
+#_________________________Funções_____________________________
+
+def ir_para_dashboard():
+    
+    janela_abas.set('Dashboard')
+
+def mudar_modo_dark():
+    
+    if switch_mododark.get() == 1:
+        ctk.set_appearance_mode('Dark')
+    else:
+        ctk.set_appearance_mode('Light')
+        
+def salvar_perfil():
+    
+    nome = campo_nome.get().title()
+    
+    if nivel_usuario.get() == 2:
+        nivel = 'Administrador'
+    else:
+        nivel = 'Básico'
+
+    receber_notificacoes = checkbox_notificacoes.get()
+    subtitulo.configure(text=f'{nome}\n\n{nivel}')
+    
+def atualizar_volume(novo_valor_volume):
+    
+    label_valor_volume.configure(text=f'{novo_valor_volume:.0f}%')
+    
+
+def carregar():
+    for i in range(101):
+        barra_progresso.set((i + 1)/100)
+        time.sleep(0.3)
+        janela.update()
+        volume.configure(text=f'{i}%')
+    
 
 ctk.set_appearance_mode('dark')
 
@@ -39,6 +77,15 @@ titulo = ctk.CTkLabel(
 )
 titulo.pack(pady=(40,10),padx=(20,20))
 
+subtitulo = ctk.CTkLabel(
+    barra_lateral,
+    text='',
+    font=('Cascadia Code',16),
+    text_color="#D70D72"
+)
+subtitulo.pack(pady=(5,20))
+
+
 botao_principal = ctk.CTkButton(
     barra_lateral,
     text='Dashboard Principal',
@@ -48,7 +95,8 @@ botao_principal = ctk.CTkButton(
     border_color="#0C090A",
     fg_color="transparent",
     cursor='hand2',
-    hover_color= "#B5085F"
+    hover_color= "#B5085F",
+    command=ir_para_dashboard
     )
 botao_principal.pack(pady=(40,20),padx=(20,20))
 
@@ -58,7 +106,8 @@ switch_mododark = ctk.CTkSwitch(
     font=('Cascadia Code',18),
     progress_color="#B21463",
     button_color = "#840D49",
-    button_hover_color= "#931956"
+    button_hover_color= "#931956",
+    command=mudar_modo_dark
 )
 switch_mododark.pack(side='bottom',pady=(0,40))
 switch_mododark.select()
@@ -90,7 +139,7 @@ aba_dashboard = janela_abas.tab('Dashboard')
 
 campo_nome = ctk.CTkEntry(
     aba_perfil,
-    placeholder_text='Informe seu nome completo',
+    placeholder_text='Informe seu nome',
     width=250,
     height=20,
     font=('Cascadia Code',15)
@@ -146,7 +195,8 @@ botao_salvar_perfil = ctk.CTkButton(
     border_width=2,
     border_color="#0C090A",
     cursor='hand2',
-    hover_color= "#B5085F"          
+    hover_color= "#B5085F",
+    command=salvar_perfil          
 )
 botao_salvar_perfil.pack(pady=(30,30))
 
@@ -184,7 +234,8 @@ slider_volume = ctk.CTkSlider(
     from_= 0, to=100,
     progress_color="#B21463",
     button_color = "#840D49",
-    button_hover_color= "#931956"
+    button_hover_color= "#931956",
+    command=atualizar_volume
 )
 slider_volume.pack(pady=5)
 slider_volume.set(50)
@@ -213,6 +264,13 @@ barra_progresso = ctk.CTkProgressBar(
 barra_progresso.pack(pady=(10,10))
 barra_progresso.set(0)
 
+volume = ctk.CTkLabel(
+    aba_dashboard,
+    text='',
+    font=('Cascadia Code',13)                       
+)
+volume.pack(pady=(5,10))
+
 botao_iniciar = ctk.CTkButton(
     aba_dashboard,
     text='Iniciar simulação',
@@ -222,7 +280,8 @@ botao_iniciar = ctk.CTkButton(
     border_width=2,
     border_color="#0C090A",
     cursor='hand2',
-    hover_color= "#B5085F"  
+    hover_color= "#B5085F",
+    command=carregar  
 )
 botao_iniciar.pack(pady=30)
 
